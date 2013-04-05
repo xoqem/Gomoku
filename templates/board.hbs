@@ -1,3 +1,5 @@
 <div>
-  board
+  {{#each App.boardController}}
+    {{view App.CellView contentBinding="this"}}
+  {{/each}}
 </div>

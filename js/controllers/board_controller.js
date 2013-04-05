@@ -1,7 +1,21 @@
 App.boardController = Ember.ArrayController.extend({
-  content: [0, 0, 0,
-            0, 0, 0,
-            0, 0, 0],
+  content: [],
+
+  initialize: function() {
+    var array = [];
+    for (var y = 0; y < 3; y++) {
+      for (var x = 0; x < 3; x++) {
+        array.push(
+          App.Cell.create({
+            x: x,
+            y: y,
+            value: 0
+          })
+        );
+      }
+    }
+    this.set('content', array);
+  },
 
   getIndex: function(x, y) {
     this.checkBounds(x, y);
@@ -24,19 +38,16 @@ App.boardController = Ember.ArrayController.extend({
     return this.get('content')[this.getIndex(x, y)];
   },
 
-  setCell: function(x, y, value) {
+  setCellValue: function(x, y, value) {
     var numValue = Number(value);
     this.checkValue(numValue);
-    this.replaceContent(this.getIndex(x, y), 1, [numValue]);
-  },
-
-  reset: function() {
-    var i = this.get('content').length;
-    var array = [];
-    while (i--) {
-      array.push(0);
-    }
-    this.set('content', array);
+    this.replaceContent(this.getIndex(x, y), 1, [
+      App.Cell.create({
+        x: x,
+        y: y,
+        value: numValue
+      })
+    ]);
   },
 
   textOutput: function() {
