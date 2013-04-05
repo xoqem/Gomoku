@@ -5,8 +5,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       version: '<%= pkg.version %>',
-      banner_text: 'Weather v<%= meta.version %> - ' +
-        'https://github.com/sinfree/Weather - <%= grunt.template.today("isoDateTime") %>',
+      banner_text: 'Tic Tac Toe v<%= meta.version %> - ' +
+        'https://github.com/sinfree/TicTacToe - <%= grunt.template.today("isoDateTime") %>',
       banner: '/* <%= meta.banner_text %> */\n',
       html_banner: '<!-- <%= meta.banner_text %> -->\n'
     },
@@ -71,6 +71,18 @@ module.exports = function(grunt) {
         }
       }
     },
+    ember_templates: {
+      compile: {
+        options: {
+          templateName: function(sourceFile) {
+            return sourceFile.replace(/templates\//, '');
+          }
+        },
+        files: {
+          "tmp/debug/templates.js": "templates/*.hbs",
+        }
+      }
+    },
     uglify: {
       options: {
         banner: '<%= meta.banner %>'
@@ -82,6 +94,10 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      templates: {
+        files: 'templates/*.hbs',
+        tasks: ['ember_templates']
+      },
       js: {
         files: 'js/**/*.js',
         tasks: ['jshint', 'concat:js']
@@ -105,7 +121,8 @@ module.exports = function(grunt) {
         globals: {
           $: false,
           App: true,
-          console: false
+          console: false,
+          Ember: false
         }
       }
     }
@@ -120,9 +137,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-ember-templates');
 
   // default task
-  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'copy', 'uglify', 'cssmin', 'compress', 'sleep']);
+  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'ember_templates', 'copy', 'uglify', 'cssmin', 'compress', 'sleep']);
   grunt.registerTask('test', []);
 
   // HACK: add sleep task that we call after compress, because grunt compress plugin is saying its done before the compress completes
