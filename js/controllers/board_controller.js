@@ -90,7 +90,6 @@ App.boardController = Ember.ArrayController.extend({
     ]);
 
     this.checkWinner();
-    console.log('winner:', this.get('winner'));
   },
 
   textOutput: function() {
