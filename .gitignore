@@ -1,0 +1,7 @@
+# Output files for grunt build
+dist/
+tmp/
+
+# npm modules directory
+node_modules/
+

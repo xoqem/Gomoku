@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Weather</title>
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+
+    <link href="./styles.css" rel="stylesheet">
+    <script type="text/javascript" src="./main.js"></script>
+  </head>
+  <body>
+
+    <section id="weatherapp">
+      <header id="header">
+        <h1>Weather</h1>
+        <input id="latitude-input" placeholder="Latitude?" value="47.6097" autofocus>
+        <input id="longitude-input" placeholder="Longitude?" value="-122.3331">
+      </header>
+      <section id="forecast">
+        <ul id="forecast-list"></ul>
+      </section>
+      <footer id="footer"></footer>
+    </section>
+
+
+    <!-- Templates -->
+
+    <script type="text/template" id="forecast-template">
+      <div class="view">
+        <label><%- longitude %></label>
+        <label><%- latitude %></label>
+      </div>
+    </script>
+
+  </body>
+</html>
