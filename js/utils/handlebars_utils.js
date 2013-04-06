@@ -3,7 +3,7 @@ App.HandlebarsUtil = Ember.Object.createWithMixins({
 
     Ember.Handlebars.registerHelper('shouldWrap', function(value, options) {
       var propValue = Ember.Handlebars.get(this, value, options);
-      if(propValue != (App.boardController.size - 1)) {
+      if(propValue != (App.boardController.width - 1)) {
         return options.inverse(this);
       } else {
         return options.fn(this);

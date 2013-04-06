@@ -5,6 +5,7 @@ App.gameController = Ember.Controller.extend({
   winner: null,
 
   initialize: function() {
+    // create the players
     this.set('players', [
       App.Player.create({
         icon: "X",
@@ -15,6 +16,7 @@ App.gameController = Ember.Controller.extend({
         isHuman: false
       })
     ]);
+
     this.reset();
   },
 
@@ -54,6 +56,9 @@ App.gameController = Ember.Controller.extend({
     this.set('winner', null);
     this.set('gameOver', false);
 
+    // If we have a player from last game, then this is who should start, since
+    // the game increments to the next player at the end of each turn.  If we
+    // don't have a player yet, just use the first one in the list.
     var player = this.get('currentPlayer') || this.get('players')[0];
     this.set('currentPlayer', player);
 

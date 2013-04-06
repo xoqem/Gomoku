@@ -1,6 +1,7 @@
 App.aiController = Ember.Controller.extend({
 
   playNextMove: function(player) {
+    // if there are no remaining availabe cells we can just return
     if (App.boardController.get('openCells') === 0) return;
 
     // TODO: it would be nicer to have the board controller maintain an
@@ -13,7 +14,7 @@ App.aiController = Ember.Controller.extend({
     });
 
     // for now the AI is unintelligent, just pick a random empty cell
-    var index = Math.floor(Math.random() * (cells.length - 1));
+    var index = Math.floor(Math.random() * cells.length);
     var cell = cells[index];
     App.gameController.playTurn(cell.x, cell.y);
   }
