@@ -1,7 +1,7 @@
 <div>
-  <button {{action "initialize" target="App.boardController"}}>
+  <button {{action "reset" target="App.gameController"}}>
     Reset
   </button>
 
-  Winner: {{cellValue App.boardController.winner}}
+  Winner: {{cellValue App.gameController.winner}}
 </div>

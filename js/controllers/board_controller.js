@@ -1,6 +1,5 @@
 App.boardController = Ember.ArrayController.extend({
   content: [],
-  winner: 0,
   size: 3,
 
   initialize: function() {
@@ -17,7 +16,6 @@ App.boardController = Ember.ArrayController.extend({
       }
     }
     this.set('content', array);
-    this.set('winner', 0);
   },
 
   getIndex: function(x, y) {
@@ -37,39 +35,27 @@ App.boardController = Ember.ArrayController.extend({
     }
   },
 
-  checkWinner: function() {
-    var i;
-    var j;
+  getWinner: function() {
     var diagWinner1 = this.getCell(0, 0).value;
     var diagWinner2 = this.getCell(0, this.get('size') - 1).value;
-    for (i = 0; i < this.get('size'); i++) {
+    for (var i = 0; i < this.get('size'); i++) {
       if (this.getCell(i, i).value !== diagWinner1) diagWinner1 = 0;
       if (this.getCell(i, this.get('size') - 1 - i).value !== diagWinner2) diagWinner2 = 0;
 
       var horizontalWinner = this.getCell(0, i).value;
       var verticalWinner = this.getCell(i, 0).value;
-      for (j = 1; j < this.get('size'); j++) {
+      for (var j = 1; j < this.get('size'); j++) {
         if (this.getCell(j, i).value !== horizontalWinner) horizontalWinner = 0;
         if (this.getCell(i, j).value !== verticalWinner) verticalWinner = 0;
       }
-      if (horizontalWinner !== 0) {
-        this.set('winner', horizontalWinner);
-        return;
-      }
-      if (verticalWinner !== 0) {
-        this.set('winner', verticalWinner);
-        return;
-      }
+      if (horizontalWinner !== 0) return horizontalWinner;
+      if (verticalWinner !== 0) return verticalWinner;
     }
 
-    if (diagWinner1 !== 0) {
-      this.set('winner', diagWinner1);
-      return;
-    }
-    if (diagWinner2 !== 0) {
-      this.set('winner', diagWinner2);
-      return;
-    }
+    if (diagWinner1 !== 0) return diagWinner1;
+    if (diagWinner2 !== 0) return diagWinner2;
+
+    return 0;
   },
 
   getCell: function(x, y) {
@@ -77,7 +63,7 @@ App.boardController = Ember.ArrayController.extend({
   },
 
   setCellValue: function(x, y, value) {
-    if (this.getCell(x, y).value !== 0) return;
+    if (this.getCell(x, y).value !== 0) return false;
 
     var numValue = Number(value);
     this.checkValue(numValue);
@@ -89,7 +75,7 @@ App.boardController = Ember.ArrayController.extend({
       })
     ]);
 
-    this.checkWinner();
+    return true;
   },
 
   textOutput: function() {

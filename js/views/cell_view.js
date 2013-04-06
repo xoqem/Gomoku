@@ -3,6 +3,6 @@ App.CellView = Ember.View.extend({
 
   clickHandler: function(e) {
     var cell = this.get('content');
-    App.boardController.setCellValue(cell.x, cell.y, 1);
+    App.gameController.playTurn(cell.x, cell.y);
   }
 });
