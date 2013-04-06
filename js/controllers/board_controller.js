@@ -51,7 +51,7 @@ App.boardController = Ember.ArrayController.extend({
       // try the possible run directions from this cell
       // TODO: it would be smart to mark what directions have been tried
       //       on a cell, as we could short circuit on some of the checks
-      //       later on in the bnoard if we already tried that direction
+      //       later on in the board if we already tried that direction
       //       on that cell
       for (var i = 0; i < directionsArray.length; i++) {
         var direction = directionsArray[i];
