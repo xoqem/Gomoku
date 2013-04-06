@@ -26,15 +26,17 @@ App.boardController = Ember.ArrayController.extend({
   },
 
   getIndex: function(x, y) {
+    if (checkBounds(x, y) === false) return;
     // convert from our 2D game board to the 1D content array
-    this.checkBounds(x, y);
     return x + y * this.get('width');
   },
 
   checkBounds: function(x, y) {
-    if (x < 0 || x > (this.get('width') - 1) || y < 0 || y > (this.get('height') - 1)) {
-      throw new Error("checkBounds: " + x + ", " + y + " out of bounds");
-    }
+    return (
+      x >= 0 &&
+      x < this.get('width') &&
+      y >= 0 &&
+      y < this.get('height'));
   },
 
   getWinner: function() {
