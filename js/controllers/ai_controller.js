@@ -16,6 +16,6 @@ App.aiController = Ember.Controller.extend({
     // for now the AI is unintelligent, just pick a random empty cell
     var index = Math.floor(Math.random() * cells.length);
     var cell = cells[index];
-    App.gameController.playTurn(cell.x, cell.y);
+    App.gameController.playTurn(cell.point);
   }
 }).create();

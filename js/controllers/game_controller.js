@@ -5,6 +5,8 @@ App.gameController = Ember.Controller.extend({
   winner: null,
 
   initialize: function() {
+    App.boardController.initialize();
+
     // create the players
     this.set('players', [
       App.Player.create({
@@ -20,13 +22,13 @@ App.gameController = Ember.Controller.extend({
     this.reset();
   },
 
-  playTurn: function(x, y) {
+  playTurn: function(point) {
     if (this.get('gameOver') === true) return;
 
     var player = this.get('currentPlayer');
     var playersArray = this.get('players');
     // if able to play in spot, switch to next player and check winner
-    if (App.boardController.setCellPlayer(x, y, player)) {
+    if (App.boardController.setCellPlayer(point, player)) {
       // select next player in players array
       var nextPlayer;
       for (var i = 1; i < playersArray.length; i++) {
@@ -52,7 +54,7 @@ App.gameController = Ember.Controller.extend({
   },
 
   reset: function() {
-    App.boardController.initialize();
+    App.boardController.reset();
     this.set('winner', null);
     this.set('gameOver', false);
 

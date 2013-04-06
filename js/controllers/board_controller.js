@@ -1,88 +1,101 @@
 App.boardController = Ember.ArrayController.extend({
   content: [],
+  directions: [],
   width: 3,
   height: 3,
+  winLength: 3,
   openCells: 0,
 
   initialize: function() {
-    // we need to fill our content array with the correct amount of properly
-    // initialized cell objects
-    var array = [];
-    for (var y = 0; y < this.get('height'); y++) {
-      for (var x = 0; x < this.get('width'); x++) {
-        array.push(
-          App.Cell.create({
-            x: x,
-            y: y,
-            player: null
-          })
-        );
-      }
-    }
-    this.set('content', array);
+    // initialize possible directions for winning runs
+    var directionsArray = this.get('directions');
+    directionsArray.push(App.Point.create({x: 0, y: 1}));
+    directionsArray.push(App.Point.create({x: 1, y: 0}));
+    directionsArray.push(App.Point.create({x: 1, y: 1}));
+    directionsArray.push(App.Point.create({x: 1, y: -1}));
 
-    // to begin with all of our cells are available for players to claim
-    this.set('openCells', array.length);
+    this.reset();
   },
 
-  getIndex: function(x, y) {
-    if (checkBounds(x, y) === false) return;
+  getIndex: function(point) {
+    if (this.checkBounds(point) === false) return NaN;
     // convert from our 2D game board to the 1D content array
-    return x + y * this.get('width');
+    return point.x + point.y * this.get('width');
   },
 
-  checkBounds: function(x, y) {
+  checkBounds: function(point) {
     return (
-      x >= 0 &&
-      x < this.get('width') &&
-      y >= 0 &&
-      y < this.get('height'));
+      point &&
+      point.x >= 0 &&
+      point.x < this.get('width') &&
+      point.y >= 0 &&
+      point.y < this.get('height'));
   },
 
   getWinner: function() {
-    // we'll check the diagonals in the outer for loop, since we only need to
-    // check each of those once
-    var diagWinner1 = this.getCell(0, 0).player;
-    var diagWinner2 = this.getCell(0, this.get('height') - 1).player;
-    for (var i = 0; i < this.get('height'); i++) {
-      if (this.getCell(i, i).player !== diagWinner1) diagWinner1 = null;
-      if (this.getCell(i, this.get('height') - 1 - i).player !== diagWinner2) diagWinner2 = null;
-
-      // we'll check the horizontal and veritcal scenarios in the inner loop, since we need
-      // to do this for each row an column
-      var horizontalWinner = this.getCell(0, i).player;
-      var verticalWinner = this.getCell(i, 0).player;
-      for (var j = 1; j < this.get('height'); j++) {
-        if (this.getCell(j, i).player !== horizontalWinner) horizontalWinner = null;
-        if (this.getCell(i, j).player !== verticalWinner) verticalWinner = null;
+    console.log();
+    var directionsArray = this.get('directions');
+    var winner = null;
+    // need to save off this for inside the for each callback
+    var me = this;
+    // go through all cells and check for runs on the ones that have a player
+    // assigned to them
+    // TODO: we could keep a list of filled cells and only iterate over those
+    this.forEach(function(cell, index, enumerable) {
+      // once we have a winner, just return for the rest of the checks
+      // TODO: this is a little sloppy, would be better to switch this
+      //       to some type of loop we can just break out of
+      if (winner) return;
+      // skip unassigned cells
+      if (cell.player === null) return;
+      // try the possible run directions from this cell
+      // TODO: it would be smart to mark what directions have been tried
+      //       on a cell, as we could short circuit on some of the checks
+      //       later on in the bnoard if we already tried that direction
+      //       on that cell
+      for (var i = 0; i < directionsArray.length; i++) {
+        var direction = directionsArray[i];
+        var currentCell = cell;
+        var runLength = 0;
+        // as long as we continue to find matching cells continue in this
+        // direction
+        while (
+          currentCell &&
+          currentCell.player &&
+          currentCell.player == cell.player)
+        {
+          runLength++;
+          // if we have enough matching cells in a row we've found the winner
+          if (runLength == me.get('winLength')) {
+            winner = cell.player;
+            return;
+          } else {
+            // move to the next cell in this direction
+            currentCell = me.getCell(currentCell.point.add(direction));
+          }
+        }
       }
-      // if we have a winner at any point, just return it
-      if (horizontalWinner) return horizontalWinner;
-      if (verticalWinner) return verticalWinner;
-    }
+    });
 
-    // finally, check our diagonal scenarios for a winner
-    if (diagWinner1) return diagWinner1;
-    if (diagWinner2) return diagWinner2;
-
-    // if no winner was found, just return null
-    return null;
+    return winner;
   },
 
-  getCell: function(x, y) {
-    return this.get('content')[this.getIndex(x, y)];
+  getCell: function(point) {
+    var index = this.getIndex(point);
+    if (isNaN(index)) return null;
+    return this.get('content')[index];
   },
 
-  setCellPlayer: function(x, y, player) {
+  setCellPlayer: function(point, player) {
     // cell must not be first claimed by a player
-    if (this.getCell(x, y).player !== null) return false;
+    var cell = this.getCell(point);
+    if (cell === null || cell.player !== null) return false;
 
     // replace our object in the contents with a new cell, this is to make sure
     // all the bindings will fire as expected
-    this.replaceContent(this.getIndex(x, y), 1, [
+    this.replaceContent(this.getIndex(point), 1, [
       App.Cell.create({
-        x: x,
-        y: y,
+        point: point.clone(),
         player: player
       })
     ]);
@@ -92,5 +105,26 @@ App.boardController = Ember.ArrayController.extend({
 
     // return true so the caller knows it was valid and successful
     return true;
+  },
+
+  reset: function() {
+    // fill our content array with the correct amount of properly
+    // initialized cell objects
+    var array = [];
+    var point = App.Point.create();
+    for (point.y = 0; point.y < this.get('height'); point.y++) {
+      for (point.x = 0; point.x < this.get('width'); point.x++) {
+        array.push(
+          App.Cell.create({
+            point: point.clone(),
+            player: null
+          })
+        );
+      }
+    }
+    this.set('content', array);
+
+    // set all cells as avaible
+    this.set('openCells', array.length);
   }
 }).create();
