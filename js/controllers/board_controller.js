@@ -10,7 +10,7 @@ App.boardController = Ember.ArrayController.extend({
           App.Cell.create({
             x: x,
             y: y,
-            value: 0
+            player: null
           })
         );
       }
@@ -29,52 +29,43 @@ App.boardController = Ember.ArrayController.extend({
     }
   },
 
-  checkValue: function(value) {
-    if (value !== 0 && value != 1 && value !== 2) {
-      throw new Error("checkValue: " + value + " is not a valid value");
-    }
-  },
-
   getWinner: function() {
-    var diagWinner1 = this.getCell(0, 0).value;
-    var diagWinner2 = this.getCell(0, this.get('size') - 1).value;
+    var diagWinner1 = this.getCell(0, 0).player;
+    var diagWinner2 = this.getCell(0, this.get('size') - 1).player;
     for (var i = 0; i < this.get('size'); i++) {
-      if (this.getCell(i, i).value !== diagWinner1) diagWinner1 = 0;
-      if (this.getCell(i, this.get('size') - 1 - i).value !== diagWinner2) diagWinner2 = 0;
+      if (this.getCell(i, i).player !== diagWinner1) diagWinner1 = null;
+      if (this.getCell(i, this.get('size') - 1 - i).player !== diagWinner2) diagWinner2 = null;
 
-      var horizontalWinner = this.getCell(0, i).value;
-      var verticalWinner = this.getCell(i, 0).value;
+      var horizontalWinner = this.getCell(0, i).player;
+      var verticalWinner = this.getCell(i, 0).player;
       for (var j = 1; j < this.get('size'); j++) {
-        if (this.getCell(j, i).value !== horizontalWinner) horizontalWinner = 0;
-        if (this.getCell(i, j).value !== verticalWinner) verticalWinner = 0;
+        if (this.getCell(j, i).player !== horizontalWinner) horizontalWinner = null;
+        if (this.getCell(i, j).player !== verticalWinner) verticalWinner = null;
       }
-      if (horizontalWinner !== 0) return horizontalWinner;
-      if (verticalWinner !== 0) return verticalWinner;
+      if (horizontalWinner) return horizontalWinner;
+      if (verticalWinner) return verticalWinner;
     }
 
-    if (diagWinner1 !== 0) return diagWinner1;
-    if (diagWinner2 !== 0) return diagWinner2;
+    if (diagWinner1) return diagWinner1;
+    if (diagWinner2) return diagWinner2;
 
-    return 0;
+    return null;
   },
 
   getCell: function(x, y) {
     return this.get('content')[this.getIndex(x, y)];
   },
 
-  setCellValue: function(x, y, value) {
-    if (this.getCell(x, y).value !== 0) return false;
+  setCellPlayer: function(x, y, player) {
+    if (this.getCell(x, y).player !== null) return false;
 
-    var numValue = Number(value);
-    this.checkValue(numValue);
     this.replaceContent(this.getIndex(x, y), 1, [
       App.Cell.create({
         x: x,
         y: y,
-        value: numValue
+        player: player
       })
     ]);
-
     return true;
   },
 

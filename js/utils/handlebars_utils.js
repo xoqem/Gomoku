@@ -9,18 +9,5 @@ App.HandlebarsUtil = Ember.Object.createWithMixins({
         return options.fn(this);
       }
     });
-
-    Ember.Handlebars.registerBoundHelper('cellValue', function(value) {
-      switch (value) {
-        case 1:
-          return "X";
-
-        case 2:
-          return "O";
-
-        default:
-          return "-";
-      }
-    });
   }
 });

@@ -1,5 +1,9 @@
 <button class="cell-button" {{action "clickHandler" target="view"}}>
-  {{cellValue value}}
+  {{#if player}}
+    {{player.icon}}
+  {{else}}
+    -
+  {{/if}}
 </button>
 {{#shouldWrap x}}
   <br/><br/>
