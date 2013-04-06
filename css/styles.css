@@ -1,3 +1,7 @@
+#main-container {
+  padding: 20px;
+}
+
 .cell-button {
   float: left;
   width: 30px;
