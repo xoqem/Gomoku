@@ -1,11 +1,13 @@
 App.boardController = Ember.ArrayController.extend({
   content: [],
   size: 3,
+  openCells: 0,
 
   initialize: function() {
+    var boardSize = this.get('size');
     var array = [];
-    for (var y = 0; y < this.get('size'); y++) {
-      for (var x = 0; x < this.get('size'); x++) {
+    for (var y = 0; y < boardSize; y++) {
+      for (var x = 0; x < boardSize; x++) {
         array.push(
           App.Cell.create({
             x: x,
@@ -16,6 +18,7 @@ App.boardController = Ember.ArrayController.extend({
       }
     }
     this.set('content', array);
+    this.set('openCells', boardSize * boardSize);
   },
 
   getIndex: function(x, y) {
@@ -66,6 +69,8 @@ App.boardController = Ember.ArrayController.extend({
         player: player
       })
     ]);
+
+    this.set('openCells', this.get('openCells') - 1);
     return true;
   },
 
