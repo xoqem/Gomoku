@@ -1,4 +1,10 @@
+body {
+  background-color: #353535;
+  background-image: url('images/background.png');
+}
+
 #main-container {
+  background-color: #ffffff;
   padding: 20px;
 }
 
