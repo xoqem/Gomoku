@@ -38,7 +38,7 @@ App.gameController = Ember.Controller.extend({
       // hanging if we are watching a computer controlled game
       setTimeout(
         function() {
-          App.aiController.playNextMove(player);
+          App.aiController.playNextMove();
         },
         1
       );

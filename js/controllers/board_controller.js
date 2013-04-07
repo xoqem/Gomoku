@@ -102,6 +102,16 @@ App.boardController = Ember.ArrayController.extend({
     return cells;
   },
 
+  getPlayedCells: function() {
+    var cells = [];
+    this.forEach(function(item, index, enumerable) {
+      if (item.player !== null) {
+        cells.push(item);
+      }
+    });
+    return cells;
+  },
+
   setCellPlayer: function(point, player) {
     // cell must not be first claimed by a player
     var cell = this.getCell(point);
