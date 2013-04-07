@@ -9,6 +9,9 @@ body {
           border-radius: 10px;
 }
 
+#main-container {
+}
+
 #board-view {
   margin-top: 20px;
   margin-bottom: 20px;
