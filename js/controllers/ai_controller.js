@@ -22,6 +22,10 @@ App.aiController = Ember.Controller.extend({
           runLength++;
           if (firstEmptyCell === null && currentCell.player === null) {
             // TODO: for now we are just returning the first empty cell that
+            // is part of a run, instead we want to keep track of runs that
+            // aren't blocked, then continue the longest run.  In the case
+            // of equal longest run, prefer the one that continues the most
+            // runs
             firstEmptyCell = currentCell;
             App.gameController.playTurn(firstEmptyCell.point);
             return;
@@ -37,6 +41,10 @@ App.aiController = Ember.Controller.extend({
         }
       }
     }
+
+    // TODO: we need to consider whether we must block the other player(s)
+    // from completing a run this turn and do that if we aren't going to
+    // win on this turn.
 
     // if we get to this point without having found a good cell, just
     // play a random empty cell
