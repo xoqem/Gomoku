@@ -12,12 +12,12 @@ App.playersController = Ember.ArrayController.extend({
     var players = [
       App.Player.create({
         icon: "images/cell-blue.png",
-        name: "blue",
+        name: "Blue",
         isHuman: true
       }),
       App.Player.create({
         icon: "images/cell-red.png",
-        name: "red",
+        name: "Red",
         isHuman: false
       })
     ];

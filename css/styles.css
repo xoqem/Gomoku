@@ -3,14 +3,30 @@ body {
   background-image: url('images/background.png');
 }
 
-#main-container {
-  background-color: #ffffff;
-  padding: 20px;
-  min-height: 500px;
+.rounded-corners {
+  -webkit-border-radius: 10px;
+     -moz-border-radius: 10px;
+          border-radius: 10px;
 }
 
-#board-container {
+#board-view {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
   position: relative;
+  background-color: #ffffff;
+}
+
+#controls-view {
+  background-color: #111111;
+  padding: 20px;
+  bottom: 0px;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: #ffffff;
 }
 
 .cell {

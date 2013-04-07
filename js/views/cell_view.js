@@ -9,13 +9,17 @@ App.CellView = Ember.View.extend({
   }.property('content'),
 
   style: function() {
+    var padding = App.boardController.get('padding');
+    var scale = App.boardController.get('cellSize') + App.boardController.get('cellSpacing');
     var cell = this.get('content');
-    var point = cell.point.scale(25);
+    var point = cell.point.scale(scale);
     var styleString = '';
     if (cell.player === null) {
-      styleString += 'cursor: hand; cursor: pointer;';
+      styleString += 'cursor: hand;';
+      styleString += 'cursor: pointer;';
     }
-    styleString += 'left: ' + point.x + 'px; top: ' + point.y + 'px;';
+    styleString += 'left: ' + (point.x + padding) + 'px;';
+    styleString += 'top: ' + (point.y + padding) + 'px;';
     return styleString;
   }.property('content'),
 

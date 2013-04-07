@@ -1,7 +1,14 @@
-<div>
-  <button {{action "reset" target="App.gameController"}}>
-    Reset
-  </button>
+{{#if App.gameController.gameOver}}
+  <div id="controls-view" class="rounded-corners">
+    {{#if App.gameController.winner}}
+      {{App.gameController.winner.name}} wins!
+    {{else}}
+      Draw!
+    {{/if}}
+    <br/><br/>
+    <button class="btn btn-inverse" {{action "reset" target="App.gameController"}}>
+      New Game
+    </button>
+  </div>
+{{/if}}
 
-  Winner: {{App.gameController.winner.name}}
-</div>

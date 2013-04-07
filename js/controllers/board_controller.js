@@ -1,8 +1,11 @@
 App.boardController = Ember.ArrayController.extend({
   content: [],
   directions: [],
-  width: 3,
-  height: 3,
+  padding: 10,
+  cellSize: 20,
+  cellSpacing: 5,
+  cellCols: 3,
+  cellRows: 3,
   winLength: 3,
   openCells: 0,
 
@@ -20,16 +23,16 @@ App.boardController = Ember.ArrayController.extend({
   getIndex: function(point) {
     if (this.checkBounds(point) === false) return NaN;
     // convert from our 2D game board to the 1D content array
-    return point.x + point.y * this.get('width');
+    return point.x + point.y * this.get('cellCols');
   },
 
   checkBounds: function(point) {
     return (
       point &&
       point.x >= 0 &&
-      point.x < this.get('width') &&
+      point.x < this.get('cellCols') &&
       point.y >= 0 &&
-      point.y < this.get('height'));
+      point.y < this.get('cellRows'));
   },
 
   getWinner: function() {
@@ -111,8 +114,8 @@ App.boardController = Ember.ArrayController.extend({
     // initialized cell objects
     var array = [];
     var point = App.Point.create();
-    for (point.y = 0; point.y < this.get('height'); point.y++) {
-      for (point.x = 0; point.x < this.get('width'); point.x++) {
+    for (point.y = 0; point.y < this.get('cellRows'); point.y++) {
+      for (point.x = 0; point.x < this.get('cellCols'); point.x++) {
         array.push(
           App.Cell.create({
             point: point.clone(),
