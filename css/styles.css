@@ -14,5 +14,7 @@ body {
 }
 
 .cell {
+  cursor: hand;
+  cursor: pointer;
   position: absolute;
 }
