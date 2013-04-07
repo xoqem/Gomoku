@@ -95,7 +95,7 @@ App.boardController = Ember.ArrayController.extend({
 
     // replace our object in the contents with a new cell, this is to make sure
     // all the bindings will fire as expected
-    this.replaceContent(this.getIndex(point), 1, [
+    this.replace(this.getIndex(point), 1, [
       App.Cell.create({
         point: point.clone(),
         player: player
@@ -146,7 +146,7 @@ App.boardController = Ember.ArrayController.extend({
       for (var i = 0; i < length; i++) {
         var cell = this.objectAt(i);
         if (cell.player !== null) {
-          this.replaceContent(i, 1, [
+          this.replace(i, 1, [
             App.Cell.create({
               point: cell.point,
               player: null
