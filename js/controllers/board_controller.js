@@ -1,6 +1,7 @@
 App.boardController = Ember.ArrayController.extend({
   content: [],
-  directions: [],
+  winnerDirections: [],
+  allDirections: [],
   padding: 10,
   cellSize: 20,
   cellSpacing: 5,
@@ -10,12 +11,21 @@ App.boardController = Ember.ArrayController.extend({
   openCells: 0,
 
   initialize: function() {
-    // initialize possible directions for winning runs
-    var directionsArray = this.get('directions');
-    directionsArray.push(App.Point.create({x: 0, y: 1}));
-    directionsArray.push(App.Point.create({x: 1, y: 0}));
-    directionsArray.push(App.Point.create({x: 1, y: 1}));
-    directionsArray.push(App.Point.create({x: 1, y: -1}));
+    // initialize possible directions for winning runs, since we are starting
+    // our winner check from the top left to the board, we only need to check
+    // half of the directions
+    var winnerDirectionsArray = this.get('winnerDirections');
+    winnerDirectionsArray.push(App.Point.create({x: 0, y: 1}));
+    winnerDirectionsArray.push(App.Point.create({x: 1, y: 0}));
+    winnerDirectionsArray.push(App.Point.create({x: 1, y: 1}));
+    winnerDirectionsArray.push(App.Point.create({x: 1, y: -1}));
+
+    // include both halves of the directions for uses that need all directions
+    var allDirectionsArray = this.get('allDirections');
+    for (var i = 0; i < winnerDirectionsArray.length; i++) {
+      allDirectionsArray.push(winnerDirectionsArray[i]);
+      allDirectionsArray.push(winnerDirectionsArray[i].scale(-1));
+    }
 
     this.reset();
   },
@@ -36,7 +46,7 @@ App.boardController = Ember.ArrayController.extend({
   },
 
   getWinner: function() {
-    var directionsArray = this.get('directions');
+    var directionsArray = this.get('winnerDirections');
     var length = this.get('length');
     var winLength = this.get('winLength');
     // go through all cells and check for runs on the ones that have a player
@@ -59,8 +69,7 @@ App.boardController = Ember.ArrayController.extend({
         // direction
         while (
           currentCell &&
-          currentCell.player &&
-          currentCell.player == cell.player)
+          currentCell.player === cell.player)
         {
           runLength++;
           // if we have enough matching cells in a row we've found the winner
@@ -80,7 +89,7 @@ App.boardController = Ember.ArrayController.extend({
   getCell: function(point) {
     var index = this.getIndex(point);
     if (isNaN(index)) return null;
-    return this.get('content')[index];
+    return this.objectAt(index);
   },
 
   getPlayerCells: function(player) {
