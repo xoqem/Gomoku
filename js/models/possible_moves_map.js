@@ -22,11 +22,10 @@ App.PossibleMovesMap.reopen({
     var bestScore = 0;
     var bestPossibleMoves = []; // array of moves with equal highest scores
     this.get('possibleMoves').forEach(function(key, possibleMove) {
-      score = possibleMove.getScore();
-      if (score == bestScore) {
+      if (possibleMove.score == bestScore) {
         bestPossibleMoves.push(possibleMove);
-      } if (score > bestScore) {
-        bestScore = score;
+      } if (possibleMove.score > bestScore) {
+        bestScore = possibleMove.score;
         bestPossibleMoves = [possibleMove];
       }
     });
