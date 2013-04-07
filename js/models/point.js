@@ -23,5 +23,9 @@ App.Point.reopen({
       x: this.x,
       y: this.y
     });
+  },
+
+  getKey: function() {
+    return 'p_' + this.get('x') + '_' + this.get('y');
   }
 });
