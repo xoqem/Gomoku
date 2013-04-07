@@ -13,8 +13,6 @@ body {
 }
 
 #board-view {
-  margin-top: 20px;
-  margin-bottom: 20px;
   margin-left: auto;
   margin-right: auto;
   position: relative;
@@ -22,8 +20,8 @@ body {
 }
 
 #status-message {
-  padding-top: 10px;
-  padding-left: 30px;
+  height: 30px;
+  text-align: center;
   color: #ffffff;
 }
 

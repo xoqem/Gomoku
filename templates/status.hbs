@@ -1,4 +1,5 @@
 <div id="status-message">
+  <h5>
   {{#if App.gameController.gameOver}}
     {{#if App.gameController.winner}}
       {{App.gameController.winner.name}} wins!
@@ -6,5 +7,6 @@
       Draw!
     {{/if}}
   {{/if}}
+  </h5>
 </div>
 
