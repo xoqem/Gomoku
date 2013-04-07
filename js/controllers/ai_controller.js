@@ -72,6 +72,16 @@ App.aiController = Ember.Controller.extend({
         score *= 2;
       }
 
+      // TODO: I've noticed in some cases it will have a for sure win with 3 pieces
+      // in a row, not blocked on either side, but instead of going immediately on
+      // one of the sides that would give it 4 in a row unblocked on either side,
+      // it sometimes will move into one of the cells that would be the 5th in a row
+      // skipping the 4th cell.  This makes it possible to be blocked instead of
+      // having the guarenteed victory.  We should make an optional tweak, that can
+      // be ignored if we are trying to make the AI easier, that will either recognize
+      // this case outright, or weight completing 4 in a row over skipping the 4th
+      // cell in a run and playing the in the 5th cell first.
+
       // go through the empty cells and add the weights for that possible move
       var possibleMove;
       for (var j = 0; j < emptyCells.length; j++)
