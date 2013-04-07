@@ -109,13 +109,15 @@ App.boardController = Ember.ArrayController.extend({
     return true;
   },
 
-  reset: function() {
+  initializeCells: function() {
     // fill our content array with the correct amount of properly
     // initialized cell objects
+    var cellCols = this.get('cellCols');
+    var cellRows = this.get('cellRows');
     var array = [];
     var point = App.Point.create();
-    for (point.y = 0; point.y < this.get('cellRows'); point.y++) {
-      for (point.x = 0; point.x < this.get('cellCols'); point.x++) {
+    for (point.y = 0; point.y < cellRows; point.y++) {
+      for (point.x = 0; point.x < cellCols; point.x++) {
         array.push(
           App.Cell.create({
             point: point.clone(),
@@ -125,8 +127,36 @@ App.boardController = Ember.ArrayController.extend({
       }
     }
     this.set('content', array);
+  },
+
+  resize: function (width, height) {
+    this.set('cellCols', width);
+    this.set('cellRows', height);
+    this.clear();
+    reset();
+  },
+
+  reset: function() {
+    var length = this.get('length');
+
+    if (length === 0) {
+      this.initializeCells();
+    } else {
+      // reset the claimed cells
+      for (var i = 0; i < length; i++) {
+        var cell = this.objectAt(i);
+        if (cell.player !== null) {
+          this.replaceContent(i, 1, [
+            App.Cell.create({
+              point: cell.point,
+              player: null
+            })
+          ]);
+        }
+      }
+    }
 
     // set all cells as avaible
-    this.set('openCells', array.length);
+    this.set('openCells', this.get('length'));
   }
 }).create();
