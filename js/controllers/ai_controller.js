@@ -52,7 +52,8 @@ App.aiController = Ember.Controller.extend({
             currentCell = App.boardController.getCell(currentCell.point.add(direction));
           }
 
-          if (runLength < winLength) matches = 0;
+          // if this run couldn't reach win length, or if we have no matches, ignore it
+          if (runLength < winLength || matches === 0) continue;
 
           if (matches == 4)
           {
@@ -72,14 +73,13 @@ App.aiController = Ember.Controller.extend({
           // raise to power of three to strongly prefer runs with the most matches
           matches = Math.pow(matches, 3);
 
-          if (matches > 0) {
-            for (var l = 0; l < emptyCells.length; l++) {
-              possibleMove = this.getPossibleMove(emptyCells[l].point);
-              if (somePlayer === player) {
-                possibleMove.runs += matches;
-              } else {
-                possibleMove.blocks += matches;
-              }
+          // go through the empty cells and add the weights for that possible move
+          for (var l = 0; l < emptyCells.length; l++) {
+            possibleMove = this.getPossibleMove(emptyCells[l].point);
+            if (somePlayer === player) {
+              possibleMove.runs += matches;
+            } else {
+              possibleMove.blocks += matches;
             }
           }
         }
