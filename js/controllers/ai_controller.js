@@ -23,6 +23,7 @@ App.aiController = Ember.Controller.extend({
     var directionsArray = App.boardController.get('allDirections');
     var players = App.playersController.toArray();
 
+    // check runs starting form all pieces of each player
     for (var k = 0; k < players.length; k ++) {
       var somePlayer = players[k];
       var cells = App.boardController.getPlayerCells(somePlayer);
@@ -107,10 +108,6 @@ App.aiController = Ember.Controller.extend({
       App.gameController.playTurn(bestPossibleMoves[index].point);
       return;
     }
-
-    // TODO: we need to consider whether we must block the other player(s)
-    // from completing a run this turn and do that if we aren't going to
-    // win on this turn.
 
     // if we get to this point without having found a good cell, just
     // play a random empty cell
