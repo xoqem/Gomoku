@@ -33,7 +33,6 @@ App.boardController = Ember.ArrayController.extend({
   },
 
   getWinner: function() {
-    console.log();
     var directionsArray = this.get('directions');
     var winner = null;
     // need to save off this for inside the for each callback
