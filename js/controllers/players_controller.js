@@ -16,8 +16,8 @@ App.playersController = Ember.ArrayController.extend({
         isHuman: true
       }),
       App.Player.create({
-        icon: "images/cell-red.png",
-        name: "Red",
+        icon: "images/cell-yellow.png",
+        name: "Yellow",
         isHuman: false
       })
     ];
