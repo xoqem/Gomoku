@@ -6,9 +6,13 @@ body {
 #main-container {
   background-color: #ffffff;
   padding: 20px;
+  min-height: 500px;
 }
 
-.cell-button {
-  float: left;
-  width: 30px;
+#board-container {
+  position: relative;
+}
+
+.cell {
+  position: absolute;
 }

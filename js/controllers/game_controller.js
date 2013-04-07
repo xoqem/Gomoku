@@ -10,11 +10,13 @@ App.gameController = Ember.Controller.extend({
     // create the players
     this.set('players', [
       App.Player.create({
-        icon: "X",
+        icon: "images/cell-blue.png",
+        name: "blue",
         isHuman: true
       }),
       App.Player.create({
-        icon: "O",
+        icon: "images/cell-red.png",
+        name: "red",
         isHuman: false
       })
     ]);

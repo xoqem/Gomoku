@@ -5,3 +5,5 @@ tmp/
 # npm modules directory
 node_modules/
 
+# OS added files
+Thumbs.db

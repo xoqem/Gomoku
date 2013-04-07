@@ -1,5 +1,7 @@
-<div>
-  {{#each App.boardController}}
-    {{view App.CellView contentBinding="this"}}
-  {{/each}}
+<div class="row">
+  <div id="board-container" class="span10 offset1">
+    {{#each App.boardController}}
+      {{view App.CellView contentBinding="this"}}
+    {{/each}}
+  </div>
 </div>

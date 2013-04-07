@@ -11,6 +11,13 @@ App.Point.reopen({
     });
   },
 
+  scale: function(value) {
+    return App.Point.create({
+      x: this.x * value,
+      y: this.y * value
+    });
+  },
+
   clone: function() {
     return App.Point.create({
       x: this.x,
