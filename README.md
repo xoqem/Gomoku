@@ -1,7 +1,7 @@
-TicTacToe
+Go
 =========
 
-Simple Tic Tac Toe game, which is customizable enough to play a Go style game as well.  Built as a side project to experiment with Ember, Handlebars, and Bootstrap.
+Started as a side project to build a Tic Tac Toe game to experiment with Ember, Handlebars, and Bootstrap.  Morphed into a Go game to make things more interesting.  Currently the AI is random (so no AI at all really).
 
 Building:
 
