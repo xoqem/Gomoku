@@ -1,71 +1,29 @@
 App.aiController = Ember.Controller.extend({
 
-  possibleMoves: {}, // keyed by point
-
-  getPossibleMove: function(point) {
-    var possibleMoves = this.get('possibleMoves');
-    var key = point.getKey();
-    if (!(key in possibleMoves)) {
-      possibleMoves[key] = App.PossibleMove.create({point: point});
-    }
-
-    return possibleMoves[key];
-  },
-
-  getBestPossibleMove: function(point) {
-    var score;
-    var bestScore = 0;
-    var bestPossibleMoves = []; // array of moves with equal highest scores
-    var possibleMove;
-    var possibleMoves = this.get('possibleMoves');
-    for (var key in possibleMoves) {
-      possibleMove = possibleMoves[key];
-      score = possibleMove.getScore();
-      if (score == bestScore) {
-        bestPossibleMoves.push(possibleMove);
-      } if (score > bestScore) {
-        bestScore = score;
-        bestPossibleMoves = [possibleMove];
-      }
-    }
-
-    if (bestPossibleMoves.length > 0) {
-      // pick a random move from our equal best possible moves
-      var index = Math.floor(Math.random() * bestPossibleMoves.length);
-      return bestPossibleMoves[index];
-    }
-
-    return null;
-  },
-
   playNextMove: function() {
-    this.set('possibleMoves', {});
-
     // if there are no remaining availabe cells we can just return
     if (App.boardController.get('openCells') === 0) return;
+
+    var possibleMoves = App.PossibleMovesMap.create({});
 
     // check every cell that has been played, and attemp to create runs from
     // that cell to calculate the possible move score for cells around it
     var cells = App.boardController.getPlayedCells();
     for (var i = 0; i < cells.length; i++) {
-      this.checkDirectionsFromCell(cells[i]);
+      this.checkDirectionsFromCell(cells[i], possibleMoves);
     }
 
-    console.log(this.get('possibleMoves'));
-
-    var bestPossibleMove = this.getBestPossibleMove();
+    var bestPossibleMove = possibleMoves.getBestPossibleMove();
     if (bestPossibleMove !== null) {
       App.gameController.playTurn(bestPossibleMove.point);
       return;
     }
 
-    console.log('just do a random move');
     // if there were no best possible moves, just play a random open cell
     return App.gameController.playTurn(this.getRandomUnclaimedCell().point);
   },
 
-  checkDirectionsFromCell: function(startingCell) {
-    console.log('checkDirectionsFromCell', startingCell);
+  checkDirectionsFromCell: function(startingCell, possibleMoves) {
     var directionsArray = App.boardController.get('allDirections');
     var winLength = App.boardController.get('winLength');
     var currentPlayer = App.playersController.get('player');
@@ -118,7 +76,7 @@ App.aiController = Ember.Controller.extend({
       var possibleMove;
       for (var j = 0; j < emptyCells.length; j++)
       {
-        possibleMove = this.getPossibleMove(emptyCells[j].point);
+        possibleMove = possibleMoves.getPossibleMove(emptyCells[j].point);
         if (weOwnStartingCell) {
           possibleMove.runs += score;
         } else {
