@@ -20,7 +20,7 @@ App.aiController = Ember.Controller.extend({
     }
 
     // if there were no best possible moves, just play a random open cell
-    return App.gameController.playTurn(this.getRandomUnclaimedCell().point);
+    return App.gameController.playTurn(App.boardController.getRandomEmptyCell().point);
   },
 
   checkDirectionsFromCell: function(startingCell, possibleMoves) {
@@ -96,11 +96,5 @@ App.aiController = Ember.Controller.extend({
         possibleMove.score += score;
       }
     }
-  },
-
-  getRandomUnclaimedCell: function() {
-    var cells = App.boardController.getPlayerCells(null);
-    var index = Math.floor(Math.random() * cells.length);
-    return cells[index];
   }
 }).create();

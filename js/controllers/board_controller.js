@@ -112,6 +112,12 @@ App.boardController = Ember.ArrayController.extend({
     return cells;
   },
 
+  getRandomEmptyCell: function() {
+    var cells = this.getPlayerCells(null);
+    var index = Math.floor(Math.random() * cells.length);
+    return cells[index];
+  },
+
   setCellPlayer: function(point, player) {
     // cell must not be first claimed by a player
     var cell = this.getCell(point);
