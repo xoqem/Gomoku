@@ -21,16 +21,10 @@ body {
   background-color: #111111;
 }
 
-#controls-view {
-  padding: 20px;
-  bottom: 0px;
-  width: 300px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
+#status-message {
+  padding-top: 10px;
+  padding-left: 30px;
   color: #ffffff;
-  background-color: #111111;
-
 }
 
 .cell {

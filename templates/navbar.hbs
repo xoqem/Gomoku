@@ -2,6 +2,16 @@
   <div class="navbar-inner">
     <div class="container">
       <a class="brand" href="#">Go</a>
+      <ul class="nav">
+        <li>
+          {{view App.ControlsView}}
+        </li>
+      </ul>
+      <form class="navbar-form pull-right">
+        <button class="btn btn-inverse" {{action "reset" target="App.gameController"}}>
+          New Game
+        </button>
+      </form>
     </div>
   </div>
 </div>
