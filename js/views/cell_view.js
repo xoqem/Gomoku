@@ -25,6 +25,9 @@ App.CellView = Ember.View.extend({
 
   click: function() {
     var cell = this.get('content');
-    App.gameController.playTurn(cell.point);
+    // if it is a human player's turn, attempt to claim the clicked cell
+    if (App.playersController.get('player').isHuman) {
+      App.gameController.playTurn(cell.point);
+    }
   }
 });

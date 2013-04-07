@@ -4,9 +4,9 @@ App.boardController = Ember.ArrayController.extend({
   padding: 10,
   cellSize: 20,
   cellSpacing: 5,
-  cellCols: 3,
-  cellRows: 3,
-  winLength: 3,
+  cellCols: 19,
+  cellRows: 19,
+  winLength: 5,
   openCells: 0,
 
   initialize: function() {

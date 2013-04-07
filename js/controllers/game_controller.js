@@ -34,7 +34,14 @@ App.gameController = Ember.Controller.extend({
     var player = App.playersController.get('player');
     // if computer player, do the AI move
     if (player.isHuman === false) {
-      App.aiController.playNextMove(player);
+      // wait a tick before calling play next move, to keep the app from
+      // hanging if we are watching a computer controlled game
+      setTimeout(
+        function() {
+          App.aiController.playNextMove(player);
+        },
+        1
+      );
     }
   },
 

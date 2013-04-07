@@ -13,6 +13,7 @@ body {
 }
 
 #board-view {
+  float: left;
   margin-top: 20px;
   margin-bottom: 20px;
   margin-left: auto;
@@ -22,6 +23,7 @@ body {
 }
 
 #controls-view {
+  float: left;
   padding: 20px;
   bottom: 0px;
   width: 300px;
