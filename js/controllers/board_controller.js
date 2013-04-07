@@ -37,26 +37,22 @@ App.boardController = Ember.ArrayController.extend({
 
   getWinner: function() {
     var directionsArray = this.get('directions');
-    var winner = null;
-    // need to save off this for inside the for each callback
-    var me = this;
+    var length = this.get('length');
+    var winLength = this.get('winLength');
     // go through all cells and check for runs on the ones that have a player
     // assigned to them
     // TODO: we could keep a list of filled cells and only iterate over those
-    this.forEach(function(cell, index, enumerable) {
-      // once we have a winner, just return for the rest of the checks
-      // TODO: this is a little sloppy, would be better to switch this
-      //       to some type of loop we can just break out of
-      if (winner) return;
+    for (var i = 0; i < length; i++) {
+      var cell = this.objectAt(i);
       // skip unassigned cells
-      if (cell.player === null) return;
+      if (cell.player === null) continue;
       // try the possible run directions from this cell
       // TODO: it would be smart to mark what directions have been tried
       //       on a cell, as we could short circuit on some of the checks
       //       later on in the board if we already tried that direction
       //       on that cell
-      for (var i = 0; i < directionsArray.length; i++) {
-        var direction = directionsArray[i];
+      for (var j = 0; j < directionsArray.length; j++) {
+        var direction = directionsArray[j];
         var currentCell = cell;
         var runLength = 0;
         // as long as we continue to find matching cells continue in this
@@ -68,24 +64,33 @@ App.boardController = Ember.ArrayController.extend({
         {
           runLength++;
           // if we have enough matching cells in a row we've found the winner
-          if (runLength == me.get('winLength')) {
-            winner = cell.player;
-            return;
+          if (runLength == winLength) {
+            return cell.player;
           } else {
             // move to the next cell in this direction
-            currentCell = me.getCell(currentCell.point.add(direction));
+            currentCell = this.getCell(currentCell.point.add(direction));
           }
         }
       }
-    });
+    }
 
-    return winner;
+    return null;
   },
 
   getCell: function(point) {
     var index = this.getIndex(point);
     if (isNaN(index)) return null;
     return this.get('content')[index];
+  },
+
+  getPlayerCells: function(player) {
+    var cells = [];
+    this.forEach(function(item, index, enumerable) {
+      if (item.player === player) {
+        cells.push(item);
+      }
+    });
+    return cells;
   },
 
   setCellPlayer: function(point, player) {
