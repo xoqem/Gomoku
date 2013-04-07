@@ -11,7 +11,6 @@ App.CellView = Ember.View.extend({
   style: function() {
     var cell = this.get('content');
     var point = cell.point.scale(25);
-
     var styleString = '';
     if (cell.player === null) {
       styleString += 'cursor: hand; cursor: pointer;';
