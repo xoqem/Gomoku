@@ -2,5 +2,7 @@
   {{view App.PlayerIconView contentBinding="player"}}
 </div>
 <div class="cellScore" style="position: absolute; left: 0px; top: 0px">
-  {{view.score}}
+  {{#if App.gameController.debug}}
+    {{view.score}}
+  {{/if}}
 </div>

@@ -1,7 +1,9 @@
 App.gameController = Ember.Controller.extend({
   gameOver: false,
   winner: null,
-  possibleMoves: null, // just to expose AI move scorse for debugging
+
+  debug: false, // debug mode
+  possibleMoves: null, // just to expose AI move scores for debugging
 
   initialize: function() {
     App.playersController.initialize();
