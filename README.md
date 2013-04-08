@@ -1,7 +1,7 @@
-Go
+Gomoku
 =========
 
-Started as a side project to build a Tic Tac Toe game to experiment with Ember, Handlebars, and Bootstrap.  Morphed into a Go game to make things more interesting.  Includes a basic AI that scores potential moves by various factors.
+Started as a side project to build a Tic Tac Toe game to experiment with Ember, Handlebars, and Bootstrap.  Morphed into a Gomoku game to make things more interesting.  Includes a basic AI that weights potential moves by various factors.
 
 Building:
 
