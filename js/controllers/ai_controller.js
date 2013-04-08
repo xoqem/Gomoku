@@ -4,6 +4,8 @@ App.aiController = Ember.Controller.extend({
   // on the board
   possibleMoves: null,
 
+  evaluateAllCells: false, // faster to only start on played cells and branch out
+
   playNextMove: function() {
     // if there are no remaining availabe cells we can just return
     if (App.boardController.get('openCells') === 0) return;
@@ -11,11 +13,18 @@ App.aiController = Ember.Controller.extend({
     // create a new empty possible move maps for scoring moves we check
     var possibleMoves = App.PossibleMovesMap.create({});
 
-    // check every cell that has been played, and attemp to create runs from
-    // that cell to calculate the possible move score for cells around it
-    var cells = App.boardController.getPlayedCells();
+    var cells;
+    var directionsArray;
+    if (this.get('evaluateAllCells')) {
+      cells = App.boardController.toArray();
+      directionsArray = App.boardController.get('winnerDirections');
+    } else {
+      cells = App.boardController.getPlayedCells();
+      directionsArray = App.boardController.get('allDirections');
+    }
+
     for (var i = 0; i < cells.length; i++) {
-      this.checkDirectionsFromCell(cells[i], possibleMoves);
+      this.checkDirectionsFromCell(cells[i], directionsArray, possibleMoves);
     }
 
     // just updating the publically visible properties just in case anyone is
@@ -33,8 +42,7 @@ App.aiController = Ember.Controller.extend({
     return App.gameController.playTurn(App.boardController.getRandomEmptyCell().point);
   },
 
-  checkDirectionsFromCell: function(startingCell, possibleMoves) {
-    var directionsArray = App.boardController.get('allDirections');
+  checkDirectionsFromCell: function(startingCell, directionsArray, possibleMoves) {
     var winLength = App.boardController.get('winLength');
     for (var i = 0; i < directionsArray.length; i++) {
       var direction = directionsArray[i];
@@ -47,9 +55,10 @@ App.aiController = Ember.Controller.extend({
       while (
         runLength < winLength &&
         currentCell &&
-        (currentCell.player === playerMatched || currentCell.player === null))
+        (playerMatched === null || currentCell.player === playerMatched || currentCell.player === null))
       {
         runLength++;
+        var prevCell = currentCell;
         if (currentCell.player === null) {
           emptyCells.push(currentCell);
         } else {
@@ -63,12 +72,13 @@ App.aiController = Ember.Controller.extend({
 
         // move to the next cell in this direction
         currentCell = App.boardController.getCell(currentCell.point.add(direction));
+        console.log(runLength, prevCell, currentCell);
       }
 
       // if this run couldn't reach win length, or if we have no matches, ignore it
       if (runLength < winLength || matches === 0) continue;
 
-      // raise to power of three to strongly prefer runs with the most matches
+      // raise to power of 3 to strongly prefer runs with the most matches
       var score = Math.pow(matches, 3);
 
       var currentPlayer = App.playersController.get('player');
