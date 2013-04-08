@@ -7,6 +7,12 @@ App.PossibleMovesMap.reopen({
     this.set('possibleMoves', Ember.Map.create({}));
   },
 
+  contains: function(point) {
+    var possibleMoves = this.get('possibleMoves');
+    var key = point.getKey();
+    return possibleMoves.has(key);
+  },
+
   getPossibleMove: function(point) {
     var possibleMoves = this.get('possibleMoves');
     var key = point.getKey();

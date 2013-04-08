@@ -1,9 +1,14 @@
 App.aiController = Ember.Controller.extend({
 
+  // exposing this for debugging purposes, so we can show possible move scores
+  // on the board
+  possibleMoves: null,
+
   playNextMove: function() {
     // if there are no remaining availabe cells we can just return
     if (App.boardController.get('openCells') === 0) return;
 
+    // create a new empty possible move maps for scoring moves we check
     var possibleMoves = App.PossibleMovesMap.create({});
 
     // check every cell that has been played, and attemp to create runs from
@@ -12,6 +17,11 @@ App.aiController = Ember.Controller.extend({
     for (var i = 0; i < cells.length; i++) {
       this.checkDirectionsFromCell(cells[i], possibleMoves);
     }
+
+    // just updating the publically visible properties just in case anyone is
+    // listening for our updated possible moves (for example, if we are showing
+    // each cell's score for debug purposes)
+    this.set('possibleMoves', possibleMoves);
 
     var bestPossibleMove = possibleMoves.getBestPossibleMove();
     if (bestPossibleMove !== null) {
@@ -26,11 +36,10 @@ App.aiController = Ember.Controller.extend({
   checkDirectionsFromCell: function(startingCell, possibleMoves) {
     var directionsArray = App.boardController.get('allDirections');
     var winLength = App.boardController.get('winLength');
-    var currentPlayer = App.playersController.get('player');
-    var weOwnStartingCell = (startingCell.player === currentPlayer);
     for (var i = 0; i < directionsArray.length; i++) {
       var direction = directionsArray[i];
       var currentCell = startingCell;
+      var playerMatched = startingCell.player;
       var runLength = 0;
       var emptyCells = [];
       var matches = 0;
@@ -38,12 +47,17 @@ App.aiController = Ember.Controller.extend({
       while (
         runLength < winLength &&
         currentCell &&
-        (currentCell.player === startingCell.player || currentCell.player === null))
+        (currentCell.player === playerMatched || currentCell.player === null))
       {
         runLength++;
         if (currentCell.player === null) {
           emptyCells.push(currentCell);
         } else {
+          // the first player we match in this run will be the player we
+          // check for this run.  If there turns out to be multiple players
+          // in the run, then we will throw this run away for scoring
+          // purposes
+          playerMatched = currentCell.player;
           matches++;
         }
 
@@ -57,10 +71,13 @@ App.aiController = Ember.Controller.extend({
       // raise to power of three to strongly prefer runs with the most matches
       var score = Math.pow(matches, 3);
 
+      var currentPlayer = App.playersController.get('player');
+      var weArePlayerMatched = (currentPlayer === playerMatched);
+
       // special case for finding a 4 in a row
       if (matches == 4)
       {
-        if (weOwnStartingCell) {
+        if (weArePlayerMatched) {
           // if we have 4 in a row that we can complete, do that immediately
           App.gameController.playTurn(emptyCells[0].point);
           return;
@@ -84,7 +101,7 @@ App.aiController = Ember.Controller.extend({
 
       // weight moves that beneift us over blocking other players.
       // TODO: we could make this part of this AI's personality / difficulty
-      if (weOwnStartingCell) {
+      if (weArePlayerMatched) {
         score *= 2;
       }
 
@@ -96,5 +113,9 @@ App.aiController = Ember.Controller.extend({
         possibleMove.score += score;
       }
     }
+  },
+
+  reset: function() {
+    this.set('possibleMoves', null);
   }
 }).create();

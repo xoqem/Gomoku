@@ -46,6 +46,7 @@ App.gameController = Ember.Controller.extend({
   },
 
   reset: function() {
+    App.aiController.reset();
     App.boardController.reset();
     this.set('winner', null);
     this.set('gameOver', false);

@@ -1,12 +1,19 @@
 App.CellView = Ember.View.extend({
-  tagName: 'img',
+  templateName: 'cell',
+  tagName: 'div',
   classNames: ['cell'],
-  attributeBindings: ['src', 'style'],
+  attributeBindings: ['style'],
 
-  src: function () {
+  score: function() {
+    // for debugging, we can grab the score of this cell from the last AI
+    // calculation that was run
     var cell = this.get('content');
-    return cell.player ? cell.player.icon : 'images/cell.png';
-  }.property('content'),
+    var possibleMoves = App.aiController.get('possibleMoves');
+    if (possibleMoves && possibleMoves.contains(cell.point)) {
+      return possibleMoves.getPossibleMove(cell.point).score;
+    }
+    return null;
+  }.property('App.aiController.possibleMoves'),
 
   style: function() {
     var padding = App.boardController.get('padding');

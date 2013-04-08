@@ -28,3 +28,10 @@ body {
 .cell {
   position: absolute;
 }
+
+.cellScore {
+  color: #ffffff;
+  font-size: 8px;
+  text-align: center;
+  padding-left: 3px;
+}
