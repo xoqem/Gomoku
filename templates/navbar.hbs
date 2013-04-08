@@ -2,11 +2,20 @@
   <div class="navbar-inner">
     <div class="container">
       <a class="brand" href="#">Gomoku</a>
-      <form class="navbar-form pull-right">
-        <button class="btn btn-inverse" {{action "reset" target="App.gameController"}}>
-          New Game
-        </button>
-      </form>
+      <ul class="nav pull-right">
+        <li class="divider-vertical"></li>
+        <li>
+          <a href="#" {{action reset item on="click" target="App.gameController"}}>
+            New Game
+          </a>
+        </li>
+        <li class="divider-vertical"></li>
+        <li>
+          <a href="#">
+            Settings
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
