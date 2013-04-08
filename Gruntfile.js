@@ -5,8 +5,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       version: '<%= pkg.version %>',
-      banner_text: 'Tic Tac Toe v<%= meta.version %> - ' +
-        'https://github.com/sinfree/TicTacToe - <%= grunt.template.today("isoDateTime") %>',
+      banner_text: 'Gomoku v<%= meta.version %> - ' +
+        'https://github.com/sinfree/Gomoku - <%= grunt.template.today("isoDateTime") %>',
       banner: '/* <%= meta.banner_text %> */\n',
       html_banner: '<!-- <%= meta.banner_text %> -->\n'
     },
