@@ -8,12 +8,12 @@ App.CellView = Ember.View.extend({
     // for debugging, we can grab the score of this cell from the last AI
     // calculation that was run
     var cell = this.get('content');
-    var possibleMoves = App.aiController.get('possibleMoves');
+    var possibleMoves = App.gameController.get('possibleMoves');
     if (possibleMoves && possibleMoves.contains(cell.point)) {
       return possibleMoves.getPossibleMove(cell.point).score;
     }
     return null;
-  }.property('App.aiController.possibleMoves'),
+  }.property('App.gameController.possibleMoves'),
 
   style: function() {
     var padding = App.boardController.get('padding');

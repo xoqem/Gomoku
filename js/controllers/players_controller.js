@@ -11,11 +11,13 @@ App.playersController = Ember.ArrayController.extend({
     // create the players
     var players = [
       App.Player.create({
+        ai: App.Ai.create(),
         icon: "images/cell-blue.png",
         name: "Blue",
         isHuman: true
       }),
       App.Player.create({
+        ai: App.Ai.create(),
         icon: "images/cell-yellow.png",
         name: "Yellow",
         isHuman: false

@@ -1,12 +1,9 @@
-App.aiController = Ember.Controller.extend({
+App.Ai = Ember.Object.extend({
+  evaluateAllCells: false
+});
 
-  // exposing this for debugging purposes, so we can show possible move scores
-  // on the board
-  possibleMoves: null,
-
-  evaluateAllCells: false, // faster to only start on played cells and branch out
-
-  playNextMove: function() {
+App.Ai.reopen({
+  getPossibleMoves: function() {
     // if there are no remaining availabe cells we can just return
     if (App.boardController.get('openCells') === 0) return;
 
@@ -27,19 +24,7 @@ App.aiController = Ember.Controller.extend({
       this.checkDirectionsFromCell(cells[i], directionsArray, possibleMoves);
     }
 
-    // just updating the publically visible properties just in case anyone is
-    // listening for our updated possible moves (for example, if we are showing
-    // each cell's score for debug purposes)
-    this.set('possibleMoves', possibleMoves);
-
-    var bestPossibleMove = possibleMoves.getBestPossibleMove();
-    if (bestPossibleMove !== null) {
-      App.gameController.playTurn(bestPossibleMove.point);
-      return;
-    }
-
-    // if there were no best possible moves, just play a random open cell
-    return App.gameController.playTurn(App.boardController.getRandomEmptyCell().point);
+    return possibleMoves;
   },
 
   checkDirectionsFromCell: function(startingCell, directionsArray, possibleMoves) {
@@ -72,7 +57,6 @@ App.aiController = Ember.Controller.extend({
 
         // move to the next cell in this direction
         currentCell = App.boardController.getCell(currentCell.point.add(direction));
-        console.log(runLength, prevCell, currentCell);
       }
 
       // if this run couldn't reach win length, or if we have no matches, ignore it
@@ -87,16 +71,14 @@ App.aiController = Ember.Controller.extend({
       // special case for finding a 4 in a row
       if (matches == 4)
       {
-        if (weArePlayerMatched) {
-          // if we have 4 in a row that we can complete, do that immediately
-          App.gameController.playTurn(emptyCells[0].point);
-          return;
-        }
-
-        // otherwise, heavily weight blocking the winning move by the other
-        // player, but don't short circuit since we aren't guarenteed to have
-        // checked our own pieces yet
+        // generally 4 in a row require immediate attention, so weight heavily
         score *= 2;
+
+        if (weArePlayerMatched) {
+          // if we have 4 in a row that we can complete, make it pretty much
+          // impossible to not be the highest score
+          score *= 2;
+        }
       }
 
       // TODO: I've noticed in some cases it will have a for-sure win with 3 pieces
@@ -123,9 +105,5 @@ App.aiController = Ember.Controller.extend({
         possibleMove.score += score;
       }
     }
-  },
-
-  reset: function() {
-    this.set('possibleMoves', null);
   }
-}).create();
+});
