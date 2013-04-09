@@ -1,5 +1,5 @@
 var App = Ember.Application.create({
-  name: "Tic Tac Toe",
+  name: "Gomoku",
   ready: function() {
     App.HandlebarsUtil.registerHelpers();
     App.gameController.initialize();
