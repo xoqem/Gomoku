@@ -17,7 +17,7 @@ module.exports = function(grunt) {
           archive: 'dist/debug.tar.gz'
         },
         files: [
-          {expand: true, cwd: 'tmp/debug', src: ['*'], dest: '<%= pkg.name %>-<%= meta.version %>'}
+          {expand: true, cwd: 'tmp/debug', src: ['**/*'], dest: '<%= pkg.name %>-<%= meta.version %>'}
         ]
       },
       release: {
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
           archive: 'dist/release.tar.gz'
         },
         files: [
-          {expand: true, cwd: 'tmp/release', src: ['*'], dest: '<%= pkg.name %>-<%= meta.version %>'}
+          {expand: true, cwd: 'tmp/release', src: ['**/*'], dest: '<%= pkg.name %>-<%= meta.version %>'}
         ]
       }
     },
