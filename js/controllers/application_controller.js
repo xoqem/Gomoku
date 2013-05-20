@@ -1,1 +1,9 @@
-App.ApplicationController = Ember.ArrayController.extend();
+define([
+  'jquery',
+  'ember'
+], function($, Ember) {
+
+  var ApplicationController = Ember.Controller.extend();
+
+  return ApplicationController;
+});

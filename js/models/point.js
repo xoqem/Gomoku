@@ -1,31 +1,39 @@
-App.Point = Ember.Object.extend({
-  x: 0,
-  y: 0
-});
+define([
+  'jquery',
+  'ember'
+], function($, Ember) {
 
-App.Point.reopen({
-  add: function(point) {
-    return App.Point.create({
-      x: this.x + point.x,
-      y: this.y + point.y
-    });
-  },
+  var Point = Ember.Object.extend({
+    x: 0,
+    y: 0
+  });
 
-  scale: function(value) {
-    return App.Point.create({
-      x: this.x * value,
-      y: this.y * value
-    });
-  },
+  Point.reopen({
+    add: function(point) {
+      return Point.create({
+        x: this.x + point.x,
+        y: this.y + point.y
+      });
+    },
 
-  clone: function() {
-    return App.Point.create({
-      x: this.x,
-      y: this.y
-    });
-  },
+    scale: function(value) {
+      return Point.create({
+        x: this.x * value,
+        y: this.y * value
+      });
+    },
 
-  getKey: function() {
-    return 'p_' + this.get('x') + '_' + this.get('y');
-  }
+    clone: function() {
+      return Point.create({
+        x: this.x,
+        y: this.y
+      });
+    },
+
+    getKey: function() {
+      return 'p_' + this.get('x') + '_' + this.get('y');
+    }
+  });
+
+  return Point;
 });

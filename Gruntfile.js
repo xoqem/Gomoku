@@ -5,8 +5,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       version: '<%= pkg.version %>',
-      banner_text: 'Gomoku v<%= meta.version %> - ' +
-        'https://github.com/xoqem/Gomoku - <%= grunt.template.today("isoDateTime") %>',
+      banner_text: 'Gomoku <%= meta.version %> - ' +
+        'https://github.com/xoqem/gomoku - <%= grunt.template.today("isoDateTime") %>',
       banner: '/* <%= meta.banner_text %> */\n',
       html_banner: '<!-- <%= meta.banner_text %> -->\n'
     },
@@ -35,20 +35,13 @@ module.exports = function(grunt) {
           banner: '<%= meta.banner %>'
         },
         src: ['css/**/*.css'],
-        dest: 'tmp/debug/styles.css'
-      },
-      js: {
-        options: {
-          banner: '<%= meta.banner %>'
-        },
-        src: ['js/**/*.js'],
-        dest: 'tmp/debug/main.js'
+        dest: 'tmp/debug/css/styles.css'
       },
       index: {
         options: {
           banner: '<%= meta.html_banner %>'
         },
-        src: ['html/index.html'],
+        src: ['index.html'],
         dest: 'tmp/debug/index.html'
       }
     },
@@ -56,6 +49,16 @@ module.exports = function(grunt) {
       images: {
         files: [
           {expand: true, cwd: 'images', src: ['**'], dest: 'tmp/debug/images/'}
+        ]
+      },
+      js: {
+        files: [
+          {expand: true, cwd: 'js', src: ['**'], dest: 'tmp/debug/js/'}
+        ]
+      },
+      templates: {
+        files: [
+          {expand: true, cwd: 'templates', src: ['**'], dest: 'tmp/debug/templates/'}
         ]
       },
       release: {
@@ -71,37 +74,19 @@ module.exports = function(grunt) {
         }
       }
     },
-    ember_templates: {
-      compile: {
-        options: {
-          templateName: function(sourceFile) {
-            return sourceFile.replace(/templates\//, '');
-          }
-        },
-        files: {
-          "tmp/debug/templates.js": "templates/*.hbs",
-        }
-      }
-    },
     uglify: {
-      options: {
-        banner: '<%= meta.banner %>'
-      },
-      dist: {
-        files: {
-          'tmp/release/main.js': ['tmp/release/main.js']
-        }
+      release: {
+        files: [
+          {
+            expand: true,
+            cwd: 'tmp/release/js/',
+            src: ['**/*.js'],
+            dest: 'tmp/release/js/'
+          }
+        ]
       }
     },
     watch: {
-      templates: {
-        files: 'templates/*.hbs',
-        tasks: ['ember_templates']
-      },
-      js: {
-        files: 'js/**/*.js',
-        tasks: ['jshint', 'concat:js']
-      },
       css: {
         files: 'css/**/*.css',
         tasks: ['concat:css']
@@ -113,6 +98,14 @@ module.exports = function(grunt) {
       images: {
         files: 'images/**',
         tasks: ['copy:images']
+      },
+      js: {
+        files: 'js/**/*.js',
+        tasks: ['jshint', 'copy:js']
+      },
+      templates: {
+        files: 'templates/**/*.tpl',
+        tasks: ['copy:templates']
       }
     },
     jshint: {
@@ -121,8 +114,7 @@ module.exports = function(grunt) {
         globals: {
           $: false,
           App: true,
-          console: false,
-          Ember: false
+          console: false
         }
       }
     }
@@ -137,9 +129,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-ember-templates');
 
   // default task
-  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'ember_templates', 'copy', 'uglify', 'cssmin', 'compress']);
+  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'copy', 'uglify', 'cssmin', 'compress']);
   grunt.registerTask('test', []);
 };

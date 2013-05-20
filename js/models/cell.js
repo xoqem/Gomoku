@@ -1,4 +1,12 @@
-App.Cell = Ember.Object.extend({
-  point: null,
-  player: null
+define([
+  'jquery',
+  'ember'
+], function($, Ember) {
+
+  var Cell = Ember.Object.extend({
+    point: null,
+    player: null
+  });
+
+  return Cell;
 });
