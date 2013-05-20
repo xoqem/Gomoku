@@ -140,11 +140,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-ember-templates');
 
   // default task
-  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'ember_templates', 'copy', 'uglify', 'cssmin', 'compress', 'sleep']);
+  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'ember_templates', 'copy', 'uglify', 'cssmin', 'compress']);
   grunt.registerTask('test', []);
-
-  // HACK: add sleep task that we call after compress, because grunt compress plugin is saying its done before the compress completes
-  grunt.registerTask('sleep', function() {
-    setTimeout(this.async(), 2000);
-  });
 };
