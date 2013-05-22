@@ -51,9 +51,9 @@ module.exports = function(grunt) {
           {expand: true, cwd: 'images', src: ['**'], dest: 'tmp/debug/images/'}
         ]
       },
-      js: {
+      libs: {
         files: [
-          {expand: true, cwd: 'js', src: ['**'], dest: 'tmp/debug/js/'}
+          {expand: true, cwd: 'libs', src: ['**'], dest: 'tmp/debug/libs/'}
         ]
       },
       templates: {
@@ -70,7 +70,22 @@ module.exports = function(grunt) {
     cssmin: {
       release: {
         files: {
-          "tmp/release/styles.css": ["tmp/release/styles.css"]
+          'tmp/release/styles.css': ['tmp/release/styles.css']
+        }
+      }
+    },
+    requirejs: {
+      compile: {
+        options: {
+          name: 'main',
+          mainConfigFile: 'js/main.js',
+          out: 'tmp/debug/js/main.js',
+          paths: {
+            jquery: 'empty:',
+            handlebars: 'empty:',
+            ember: 'empty:'
+          },
+          exclude: ['jquery','handlebars', 'ember', 'text']
         }
       }
     },
@@ -101,7 +116,7 @@ module.exports = function(grunt) {
       },
       js: {
         files: 'js/**/*.js',
-        tasks: ['jshint', 'copy:js']
+        tasks: ['jshint', 'requirejs']
       },
       templates: {
         files: 'templates/**/*.tpl',
@@ -127,10 +142,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // default task
-  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'copy', 'uglify', 'cssmin', 'compress']);
+  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'requirejs', 'copy', 'uglify', 'cssmin', 'compress']);
   grunt.registerTask('test', []);
 };
