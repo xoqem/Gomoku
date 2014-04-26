@@ -17,7 +17,6 @@ define([
 
       Ember.Handlebars.registerHelper('scale', function(value) {
         var propValue = Ember.Handlebars.get(this, value);
-        console.log(propValue);
         return propValue * 35;
       });
     }
