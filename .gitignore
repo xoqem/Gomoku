@@ -7,3 +7,6 @@ node_modules/
 
 # OS added files
 Thumbs.db
+
+#IDE files
+.idea
