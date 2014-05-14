@@ -147,6 +147,15 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // default task
-  grunt.registerTask('default', ['clean', 'jshint', 'concat', 'requirejs', 'copy', 'uglify', 'cssmin', 'compress']);
+  grunt.registerTask('default', [
+    'clean',
+    'jshint',
+    'concat',
+    'requirejs',
+    'copy',
+    'uglify',
+    'cssmin',
+    'compress'
+  ]);
   grunt.registerTask('test', []);
 };
